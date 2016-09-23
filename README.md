@@ -32,5 +32,15 @@ slower lookups than MyISAM, but InnoDB has always offered particularly fast look
 InnoDB implements row-level locking.  
 
 #####MEMORY
-It stores the entire table in memory.  
+It stores the entire table in memory. 
+The maximum size of MEMORY tables is limited by the max_heap_table_size variable, which defaults to 16 MB.  
 The MEMORY engine is the only major storage engine to offer the choice of B-tree or hashing for indexes — MyISAM and InnoDB both use B-tree only.  
+B-trees are usually a better choice for large indexes (which won’t fit fully into RAM). Hash tables are faster but only for smaller indexes (they don’t scale as well as B-tree)  
+
+
+####TUNING MYSQL
+[reference](https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html)
+#####Table Cache
+######table_open_cache
+To avoid locking problems when multiple clients simultaneously attempt to access the same table, MySQL actually keeps a separate copy of the table open for each client accessing it.  
+most desirable size for the table cache is proportional to the ```max_connections```
